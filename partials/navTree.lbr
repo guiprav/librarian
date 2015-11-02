@@ -1,0 +1,15 @@
+<ul class="lbrNavTree">
+    {{#recurse hash.nav.children}}
+        <li>
+            <a href="{{href}}">
+                {{@key}}
+            </a>
+
+            {{#if children}}
+                <ul>
+                    {{{recurse children}}}
+                </ul>
+            {{/if}}
+        </li>
+    {{/recurse}}
+</ul>
