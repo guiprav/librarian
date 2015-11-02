@@ -17,6 +17,6 @@
     "handlebars": "^4.0.4",
     "markdown": "^0.5.0",
     "mkdirp": "^0.5.1",
-    "rmrf": "^1.0.2"
+    "rmrf": "https://github.com/n2liquid/node-rmrf.git"
   }
 }
