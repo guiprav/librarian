@@ -13,7 +13,7 @@ hash.nav = {};
 
 let glob = require('glob');
 
-glob.sync('nav/**/*').forEach(function(path) {
+glob.sync('nav/**/*', { nodir: true }).forEach(function(path) {
     require('./loadNavTree')(path);
 });
 

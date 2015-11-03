@@ -33,7 +33,7 @@ module.exports = function(path) {
 
     let navLinkBuiltDocPath = (
         '/doc/' + dirName(navLinkDocPath) + '/' + navLinkDocName + '.html'
-    ).replace(/\.\//g, '');
+    ).replace(/\/\.\//g, '/');
 
     navLinkParentHash.children[navLinkName] = {
         href: navLinkBuiltDocPath,

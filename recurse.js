@@ -4,26 +4,26 @@ module.exports = function(object, propertyNames, options) {
     options = options || {};
 
     let property = propertyNames.reduce(function(object, propertyName) {
-        let property;
+        let base = object;
 
         if(options.childrenPropertyName) {
-            property = object[options.childrenPropertyName];
+            base = object[options.childrenPropertyName];
 
-            if(!property) {
-                property = object[options.childrenPropertyName] = {};
+            if(!base) {
+                base = object[options.childrenPropertyName] = {};
             }
         }
 
-        property = object[propertyName];
+        let property = base[propertyName];
 
         if(!property && options.create) {
-            property = object[propertyName] = {};
+            property = base[propertyName] = {};
         }
 
         return property;
     }, object);
 
-    if(options.childrenPropertyName) {
+    if(options.childrenPropertyName && !property[options.childrenPropertyName]) {
         property[options.childrenPropertyName] = {};
     }
 
