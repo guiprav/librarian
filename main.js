@@ -9,7 +9,7 @@ fs.symlinkSync('../assets', 'build/assets');
 
 global.hash = {};
 
-hash.nav = {};
+hash.navTree = {};
 
 let glob = require('glob');
 

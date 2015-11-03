@@ -1,13 +1,13 @@
 <ul class="lbrNavTree">
-    {{#recurse hash.nav.children}}
-        <li>
-            <a href="{{href}}">
+    {{#recurse hash.navTree}}
+        <li class="lbrNavTree_node">
+            <a href="{{either href '#toggle'}}">
                 {{@key}}
             </a>
 
             {{#if children}}
                 <ul>
-                    {{{recurse children}}}
+                    {{recurse children}}
                 </ul>
             {{/if}}
         </li>

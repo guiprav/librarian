@@ -16,10 +16,12 @@ module.exports = function(path) {
 
     let pathParts = path.split('/');
 
-    let navLinkParentHash = recurse(hash.nav, pathParts.slice(0, -1), {
-        create: true,
-        childrenPropertyName: 'children',
-    });
+    let navLinkParentHash = recurse(
+        { children: hash.navTree }, pathParts.slice(0, -1), {
+            create: true,
+            childrenPropertyName: 'children',
+        }
+    );
 
     let navLinkName = pathParts.slice(-1)[0];
 

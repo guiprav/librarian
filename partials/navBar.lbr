@@ -1,0 +1,27 @@
+<ul class="lbrNavBar">
+    {{#each hash.nav.bar}}
+        <li class="lbrNavBar_node">
+            <a href="{{href}}">
+                {{linkName}}
+            </a>
+
+            {{#if siblings}}
+                <ul class="lbrNavBar_siblings">
+                    {{#recurse siblings}}
+                        <li>
+                            <a href="{{href}}">
+                                {{@key}}
+                            </a>
+
+                            {{#if children}}
+                                <ul>
+                                    {{recurse children}}
+                                </ul>
+                            {{/if}}
+                        </li>
+                    {{/recurse}}
+                </ul>
+            {{/if}}
+        </li>
+    {{/each}}
+</ul>
