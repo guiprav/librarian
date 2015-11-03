@@ -14,7 +14,7 @@ hash.navTree = {};
 
 let glob = require('glob');
 
-glob.sync('nav/**/*', { nodir: true }).forEach(function(path) {
+glob.sync('nav/**/*.json').forEach(function(path) {
     require('./loadNavTree')(path);
 });
 

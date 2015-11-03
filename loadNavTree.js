@@ -3,41 +3,45 @@
 let fs = require('fs');
 let path = require('path');
 let relativePath = path.relative;
+let resolvePath = path.resolve;
 let baseName = path.basename;
 let dirName = path.dirname;
 
 let navRootPath = process.cwd() + '/nav';
-let docRootPath = process.cwd() + '/doc';
 
 let recurse = require('./recurse');
 
+let mkdirp = require('mkdirp');
+
 module.exports = function(path) {
+    let pathFromCwd = path;
+
     path = relativePath(navRootPath, path);
 
     let pathParts = path.split('/');
 
-    let navLinkParentHash = recurse(
+    let linkParentHash = recurse(
         { children: hash.navTree }, pathParts.slice(0, -1), {
             create: true,
             childrenPropertyName: 'children',
         }
     );
 
-    let navLinkName = pathParts.slice(-1)[0];
+    let linkData = require(resolvePath(pathFromCwd));
 
-    let navLinkDocRealPath = fs.realpathSync('nav/' + path);
+    let name = baseName(pathParts.slice(-1)[0], '.json');
 
-    let navLinkDocPath = relativePath(
-        docRootPath, navLinkDocRealPath
-    );
+    let href = '/nav/' + dirName(path) + '/' + name + '.html';
 
-    let navLinkDocName = baseName(navLinkDocPath, '.lbr');
+    let builtNavPathDirName = resolvePath('build/nav/' + dirName(path));
 
-    let navLinkBuiltDocPath = (
-        '/doc/' + dirName(navLinkDocPath) + '/' + navLinkDocName + '.html'
-    ).replace(/\/\.\//g, '/');
+    mkdirp.sync(builtNavPathDirName);
 
-    navLinkParentHash.children[navLinkName] = {
-        href: navLinkBuiltDocPath,
-    };
+    let builtDocPath = 'build/doc/' + linkData.docPath + '.html';
+
+    let symlinkRelativePath = relativePath(builtNavPathDirName, builtDocPath);
+
+    fs.symlinkSync(symlinkRelativePath, builtNavPathDirName + '/' + name + '.html');
+
+    linkParentHash.children[name] = { href };
 };
