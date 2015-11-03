@@ -13,6 +13,8 @@ let recurse = require('./recurse');
 
 let mkdirp = require('mkdirp');
 
+let urlFriendify = require('./urlFriendify');
+
 module.exports = function(path) {
     let pathFromCwd = path;
 
@@ -31,9 +33,9 @@ module.exports = function(path) {
 
     let name = baseName(pathParts.slice(-1)[0], '.json');
 
-    let href = '/nav/' + dirName(path) + '/' + name + '.html';
+    let href = '/nav/' + urlFriendify(dirName(path) + '/' + name) + '.html';
 
-    let builtNavPathDirName = resolvePath('build/nav/' + dirName(path));
+    let builtNavPathDirName = resolvePath('build/nav/' + urlFriendify(dirName(path)));
 
     mkdirp.sync(builtNavPathDirName);
 
@@ -41,7 +43,10 @@ module.exports = function(path) {
 
     let symlinkRelativePath = relativePath(builtNavPathDirName, builtDocPath);
 
-    fs.symlinkSync(symlinkRelativePath, builtNavPathDirName + '/' + name + '.html');
+    fs.symlinkSync(
+        symlinkRelativePath,
+        builtNavPathDirName + '/' + urlFriendify(name) + '.html'
+    );
 
     linkParentHash.children[name] = { href };
 };
