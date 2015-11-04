@@ -1,0 +1,7 @@
+{
+  "name": "librarian",
+  "private": true,
+  "dependencies": {
+    "uikit": "~2.23.0"
+  }
+}

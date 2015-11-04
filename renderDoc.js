@@ -1,6 +1,7 @@
 'use strict';
 
 let path = require('path');
+let resolvePath = path.resolve;
 let relativePath = path.relative;
 let dirName = path.dirname;
 let baseName = path.basename;
@@ -14,29 +15,13 @@ let hbs = require('handlebars');
 
 let glob = require('glob');
 
-glob.sync(__dirname + '/helpers/*.js').forEach(function(path) {
-    let name = baseName(path, '.js');
-
-    hbs.registerHelper(name, require(path));
-});
-
 glob.sync('helpers/*.js').forEach(function(path) {
     let name = baseName(path, '.js');
 
-    hbs.registerHelper(name, require(path));
+    hbs.registerHelper(name, require(resolvePath(path)));
 });
 
 let fs = require('fs');
-
-glob.sync(__dirname + '/partials/*.lbr').forEach(function(path) {
-    let name = baseName(path, '.lbr');
-
-    let partialText = fs.readFileSync(path, {
-        encoding: 'utf8',
-    });
-
-    hbs.registerPartial(name, partialText);
-});
 
 glob.sync('partials/*.lbr').forEach(function(path) {
     let name = baseName(path, '.lbr');

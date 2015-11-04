@@ -11,7 +11,11 @@
   "bugs": {
     "url": "https://github.com/sonetto/librarian/issues"
   },
+  "scripts": {
+    "bower": "cd demo; bower"
+  },
   "dependencies": {
+    "bower": "^1.6.5",
     "front-matter": "^2.0.0",
     "glob": "^5.0.15",
     "handlebars": "^4.0.4",
