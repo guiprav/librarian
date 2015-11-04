@@ -1,9 +1,0 @@
-<ul class="lbrNavBar">
-    {{#each breadcrumbs}}
-        <li class="lbrNavBar_node">
-            <a href="{{href}}">
-                {{linkName}}
-            </a>
-        </li>
-    {{/each}}
-</ul>
