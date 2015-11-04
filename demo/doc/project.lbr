@@ -1,6 +1,10 @@
 ---
 name: Dream Corsair
 ---
+{{> head}}
+
+{{> navTree}}
+
 <center>
     <img src="/assets/pirate_cover.jpg">
 
@@ -8,5 +12,3 @@ name: Dream Corsair
         {{name}}
     </h1>
 </center>
-
-{{> navTree}}

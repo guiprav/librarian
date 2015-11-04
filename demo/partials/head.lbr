@@ -1,3 +1,6 @@
 <!doctype html>
 <meta charset="utf-8">
-{{> nav}}
+<link rel="stylesheet" href="{{base_url}}/assets/3rdparty/uikit/css/uikit.css">
+<script src="{{base_url}}/assets/3rdparty/jquery/dist/jquery.js"></script>
+<script src="{{base_url}}/assets/3rdparty/uikit/js/uikit.js"></script>
+<script src="{{base_url}}/assets/main.js"></script>

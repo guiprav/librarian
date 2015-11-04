@@ -3,20 +3,30 @@
 let hbs = require('handlebars');
 
 let lastFn;
+let lastDepth;
 
 module.exports = function(children, options) {
     var out = '';
 
     if(options.fn !== undefined) {
         lastFn = options.fn;
+        lastDepth = 0;
+    }
+    else {
+        ++lastDepth;
     }
 
     for(let key in children) {
-        let context = Object.create(this);
+        let data = Object.create(this);
 
-        context['key'] = key;
+        data.key = key;
 
-        out += lastFn(children[key], { data: context });
+        let context = Object.create(children[key]);
+
+        context.depth = lastDepth;
+        context.wtf = 'WTF???';
+
+        out += lastFn(context, { data });
     }
 
     return new hbs.SafeString(out);
