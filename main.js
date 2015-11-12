@@ -19,7 +19,7 @@ glob.sync('nav/**/*.json').forEach(function(path) {
 });
 
 {
-    let docPaths = glob.sync('doc/**/*.lbr');
+    let docPaths = glob.sync('doc/**/*.lbr.html');
 
     docPaths.forEach(function(path) {
         require('./loadDocFrontMatter')(path);

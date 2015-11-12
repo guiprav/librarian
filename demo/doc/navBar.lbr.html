@@ -1,0 +1,134 @@
+---
+name: Navigation bar
+navTree:
+    Root: 
+        Child A:
+            Child AX: abc
+            Child AY: abc
+        Child B:
+            Child BX: abc
+            Child BZ: abc
+            Child BW: abc
+---
+{{> head}}
+
+<div class="lbrNavBar">
+    <div class="lbrNavBreadcrumb">
+        <ol class="lbrNavBreadcrumbList">
+            {{#each breadcrumbs}}
+                <li>
+                    <a href="{{either href '#'}}">
+                        {{label}}
+                    </a>
+                </li>
+            {{/each}}
+        </ol>
+    </div>
+
+    <style>
+        .lbrNavDeck {
+            width: 600px;
+            margin: 0 auto;
+            background-color: salmon;
+        }
+
+        .lbrNavTreeList.active {
+            display: block !important;
+        }
+
+        .active > .lbrNavTreeNodeLabel {
+            display: none;
+        }
+
+        .lbrNavTreeList .lbrNavTreeList .lbrNavTreeList {
+            display: none;
+        }
+
+        .lbrNavTreeList {
+            background-color: lightblue;
+        }
+
+        .lbrNavTreeList .lbrNavTreeList {
+            background-color: lightyellow;
+        }
+
+        .lbrNavTreeList .lbrNavTreeList .lbrNavTreeList {
+            background-color: lightgreen;
+        }
+    </style>
+
+    <script>
+        document.body.addEventListener('click', function(event) {
+            var target = event.target;
+            var hash = target.href.slice(target.href.indexOf('#') + 1);
+
+            if(hash.charAt(0) === '!') {
+                event.preventDefault();
+            }
+
+            function closestActiveList() {
+                return target.closest('.lbrNavTreeList.active');
+            }
+
+            function closestPreviousList() {
+                return target.closest('.lbrNavTreeList.previous');
+            }
+
+            function thisList() {
+                return target
+                    .closest('.lbrNavTreeNode')
+                    .querySelectorAll('.lbrNavTreeList')[0]
+                    || closestActiveList();
+            }
+
+            switch(hash) {
+                case '!expand':
+                    closestActiveList().classList.add('previous');
+                    thisList().classList.add('active');
+                    break;
+
+                case '!back':
+                    (function() {
+                        thisList().classList.remove('active');
+                        closestPreviousList().classList.remove('previous');
+                    })();
+                    break;
+            }
+        });
+    </script>
+
+    <div class="lbrNavDeck">
+        <ul class="lbrNavTreeList active">
+            {{#recurse navTree}}
+                <li class="lbrNavTreeNode">
+                    {{#if (cmp depth '>' 0)}}
+                        {{#if (cmp (typeof self) '=' 'object')}}
+                            <a href="#!close" class="lbrNavDeckAction">
+                                Close
+                            </a>
+
+                            <a href="#!back" class="lbrNavDeckAction">
+                                Back
+                            </a>
+                        {{/if}}
+                    {{/if}}
+
+                    <a
+                        class="lbrNavTreeNodeLabel"
+                        href="{{inlineIf
+                            (cmp (typeof self) '=' 'string') self '#!expand'
+                        }}"
+                    >
+                        {{@key}}
+                    </a>
+
+                    {{#if (cmp (typeof self) '=' 'object')}}
+                        <ul class="lbrNavTreeList">
+                            {{recurse self}}
+                        </ul>
+                    {{/if}}
+                {{/recurse}}
+            </li>
+        </ul>
+    </div>
+</div>

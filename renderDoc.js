@@ -23,8 +23,8 @@ glob.sync('helpers/*.js').forEach(function(path) {
 
 let fs = require('fs');
 
-glob.sync('partials/*.lbr').forEach(function(path) {
-    let name = baseName(path, '.lbr');
+glob.sync('partials/*.lbr.html').forEach(function(path) {
+    let name = baseName(path, '.lbr.html');
 
     let partialText = fs.readFileSync(path, {
         encoding: 'utf8',
@@ -48,7 +48,7 @@ module.exports = function(path) {
 
     mkdirp.sync('build/doc/' + dirName(path));
 
-    let renderedDocFileName = baseName(path, '.lbr') + '.html';
+    let renderedDocFileName = baseName(path, '.lbr.html') + '.html';
 
     let renderedDocText = docTemplate(doc.attributes);
 

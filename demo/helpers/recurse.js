@@ -6,7 +6,7 @@ let lastFn;
 let lastDepth;
 
 module.exports = function(children, options) {
-    var out = '';
+    let out = '';
 
     if(options.fn !== undefined) {
         lastFn = options.fn;
@@ -16,15 +16,23 @@ module.exports = function(children, options) {
         ++lastDepth;
     }
 
+    let depth = lastDepth;
+
     for(let key in children) {
         let data = Object.create(this);
 
         data.key = key;
 
-        let context = Object.create(children[key]);
+        let child = children[key];
 
-        context.depth = lastDepth;
-        context.wtf = 'WTF???';
+        if(typeof child === 'string') {
+            child = new String(child);
+        }
+
+        let context = Object.create(child);
+
+        context.self = children[key];
+        context.depth = depth;
 
         out += lastFn(context, { data });
     }

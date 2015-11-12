@@ -29,7 +29,7 @@ module.exports = function(path) {
         create: true,
     });
 
-    let docName = baseName(pathParts.slice(-1)[0], '.lbr');
+    let docName = baseName(pathParts.slice(-1)[0], '.lbr.html');
 
     docParentHash[docName] = fm(docText).attributes;
 };

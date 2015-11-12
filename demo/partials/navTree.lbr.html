@@ -17,7 +17,7 @@
                     {{#if children}}
                         <ul
                             class="
-                                {{#if (equals depth 0)}}
+                                {{#if (cmp depth '=' 0)}}
                                     uk-nav-sub
                                 {{/if}}
                             "
