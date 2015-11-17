@@ -1,12 +1,14 @@
 ---
 name: Navigation bar
 navTree:
-    Root: 
+    Root:
         Child A:
             Child AX: abc
             Child AY: abc
         Child B:
-            Child BX: abc
+            Child BX:
+                Child BXI: abc
+                Child BXJ: abc
             Child BZ: abc
             Child BW: abc
 ---
@@ -32,8 +34,20 @@ navTree:
             background-color: salmon;
         }
 
+        .lbrNavCard {
+            display: none;
+        }
+
         .lbrNavTreeList.active {
-            display: block !important;
+            display: block;
+        }
+
+        .lbrNavTreeList.previous {
+            margin-left: -100% !important;
+        }
+
+        .lbrNavTreeList.previous {
+            transform: translateX(-200%);
         }
 
         .active > .lbrNavTreeNodeLabel {
@@ -88,47 +102,47 @@ navTree:
                     break;
 
                 case '!back':
-                    (function() {
-                        thisList().classList.remove('active');
-                        closestPreviousList().classList.remove('previous');
-                    })();
+                    thisList().classList.remove('active');
+                    closestPreviousList().classList.remove('previous');
                     break;
             }
         });
     </script>
 
     <div class="lbrNavDeck">
-        <ul class="lbrNavTreeList active">
-            {{#recurse navTree}}
-                <li class="lbrNavTreeNode">
-                    {{#if (cmp depth '>' 0)}}
-                        {{#if (cmp (typeof self) '=' 'object')}}
-                            <a href="#!close" class="lbrNavDeckAction">
-                                Close
-                            </a>
+        <div class="lbrNavDeckSlider cf rel">
+            <ul class="lbrNavTreeList lbrNavCard active wide">
+                {{#recurse navTree}}
+                    <li class="lbrNavTreeNode">
+                        {{#if (cmp depth '>' 0)}}
+                            {{#if (cmp (typeof self) '=' 'object')}}
+                                <a href="#!close" class="lbrNavDeckAction">
+                                    Close
+                                </a>
 
-                            <a href="#!back" class="lbrNavDeckAction">
-                                Back
-                            </a>
+                                <a href="#!back" class="lbrNavDeckAction">
+                                    Back
+                                </a>
+                            {{/if}}
                         {{/if}}
-                    {{/if}}
 
-                    <a
-                        class="lbrNavTreeNodeLabel"
-                        href="{{inlineIf
-                            (cmp (typeof self) '=' 'string') self '#!expand'
-                        }}"
-                    >
-                        {{@key}}
-                    </a>
+                        <a
+                            class="lbrNavTreeNodeLabel"
+                            href="{{inlineIf
+                                (cmp (typeof self) '=' 'string') self '#!expand'
+                            }}"
+                        >
+                            {{@key}}
+                        </a>
 
-                    {{#if (cmp (typeof self) '=' 'object')}}
-                        <ul class="lbrNavTreeList">
-                            {{recurse self}}
-                        </ul>
-                    {{/if}}
-                {{/recurse}}
-            </li>
-        </ul>
+                        {{#if (cmp (typeof self) '=' 'object')}}
+                            <ul class="lbrNavTreeList lbrNavCard wide">
+                                {{recurse self}}
+                            </ul>
+                        {{/if}}
+                    {{/recurse}}
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
