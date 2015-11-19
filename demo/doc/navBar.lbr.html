@@ -34,44 +34,18 @@ navTree:
             background-color: salmon;
         }
 
-        .lbrNavCard {
+        .lbrNavCard:not(.active) {
             display: none;
-        }
-
-        .lbrNavTreeList.active {
-            display: block;
-        }
-
-        .lbrNavTreeList.previous {
-            margin-left: -100% !important;
-        }
-
-        .lbrNavTreeList.previous {
-            transform: translateX(-200%);
-        }
-
-        .active > .lbrNavTreeNodeLabel {
-            display: none;
-        }
-
-        .lbrNavTreeList .lbrNavTreeList .lbrNavTreeList {
-            display: none;
-        }
-
-        .lbrNavTreeList {
-            background-color: lightblue;
-        }
-
-        .lbrNavTreeList .lbrNavTreeList {
-            background-color: lightyellow;
-        }
-
-        .lbrNavTreeList .lbrNavTreeList .lbrNavTreeList {
-            background-color: lightgreen;
         }
     </style>
 
     <script>
+        'use strict';
+
+        var linkHandlers = {};
+
+        window.navTree = {{json navTree}};
+
         document.body.addEventListener('click', function(event) {
             var target = event.target;
             var hash = target.href.slice(target.href.indexOf('#') + 1);
@@ -80,69 +54,62 @@ navTree:
                 event.preventDefault();
             }
 
-            function closestActiveList() {
-                return target.closest('.lbrNavTreeList.active');
-            }
-
-            function closestPreviousList() {
-                return target.closest('.lbrNavTreeList.previous');
-            }
-
-            function thisList() {
-                return target
-                    .closest('.lbrNavTreeNode')
-                    .querySelectorAll('.lbrNavTreeList')[0]
-                    || closestActiveList();
-            }
-
-            switch(hash) {
-                case '!expand':
-                    closestActiveList().classList.add('previous');
-                    thisList().classList.add('active');
-                    break;
-
-                case '!back':
-                    thisList().classList.remove('active');
-                    closestPreviousList().classList.remove('previous');
-                    break;
-            }
+            linkHandlers[hash.slice(1)].call(target, event);
         });
+
+        linkHandlers.expand = function() {
+            var linkPath = [];
+            var card = this.closest('.lbrNavCard');
+            var nameEl;
+            var targetCard;
+
+            do {
+                nameEl = card.querySelector('.lbrNavCardName');
+                linkPath.unshift(nameEl.textContent.trim());
+            } while(card = card.parentElement.closest('.lbrNavCard'));
+
+            linkPath.push(this.textContent.trim());
+
+            this.closest('.lbrNavCard').classList.remove('active');
+
+            targetCard = 
+        };
     </script>
 
     <div class="lbrNavDeck">
-        <div class="lbrNavDeckSlider cf rel">
-            <ul class="lbrNavTreeList lbrNavCard active wide">
-                {{#recurse navTree}}
-                    <li class="lbrNavTreeNode">
-                        {{#if (cmp depth '>' 0)}}
-                            {{#if (cmp (typeof self) '=' 'object')}}
-                                <a href="#!close" class="lbrNavDeckAction">
-                                    Close
-                                </a>
+        {{#recurse navTree}}
+            <div
+                id="{{recursionUuid}}"
+                class="lbrNavCard {{inlineIf (cmp depth '=' 0) 'active'}}"
+            >
+                <a href="#!close">
+                    Close
+                </a>
 
-                                <a href="#!back" class="lbrNavDeckAction">
-                                    Back
-                                </a>
-                            {{/if}}
-                        {{/if}}
+                {{#if (cmp depth '>' 0)}}
+                    <a href="#!back">
+                        Back
+                    </a>
+                {{/if}}
 
-                        <a
-                            class="lbrNavTreeNodeLabel"
-                            href="{{inlineIf
-                                (cmp (typeof self) '=' 'string') self '#!expand'
-                            }}"
-                        >
-                            {{@key}}
-                        </a>
+                <span class="lbrNavCardName">
+                    {{@key}}
+                </span>
 
-                        {{#if (cmp (typeof self) '=' 'object')}}
-                            <ul class="lbrNavTreeList lbrNavCard wide">
-                                {{recurse self}}
-                            </ul>
-                        {{/if}}
-                    {{/recurse}}
-                </li>
-            </ul>
-        </div>
+                <ul>
+                    {{#each self}}
+                        <li>
+                            <a href="#!expand">
+                                {{@key}}
+                            </a>
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            {{#if (cmp (typeof self) '=' 'object')}}
+                {{recurse self parentUuid=}}
+            {{/if}}
+        {{/recurse}}
     </div>
 </div>
