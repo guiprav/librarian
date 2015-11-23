@@ -1,4 +1,7 @@
 {
   "name": "librarian-demo",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "zepto": "~1.1.6"
+  }
 }
